@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>รักเค้ามั้ย 💚 (Mobile)</title>
+  <title>รักเค้ามั้ย 💖 (Mobile)</title>
   <style>
     :root{
-      --bg1:#f7fffb;
-      --bg2:#e7fff4;
-      --txt:#133c2e;
-      --accent:#27c499;
-      --accent-2:#ff6b6b;
+      --bg1:#fff0f5;
+      --bg2:#ffe6f0;
+      --txt:#442233;
+      --accent:#ff6fa5;
+      --accent-2:#ff3b6a;
     }
     /* Mobile-first layout */
     html,body{ height:100%; margin:0; -webkit-tap-highlight-color:transparent; }
@@ -20,7 +20,6 @@
       background:linear-gradient(180deg,var(--bg1),var(--bg2));
     }
 
-    /* Use dynamic viewport height to avoid iOS 100vh bugs */
     .app{ height:calc(var(--vh, 1vh) * 100); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding:16px; padding-bottom:calc(16px + env(safe-area-inset-bottom)); }
 
     /* floating hearts */
@@ -30,31 +29,31 @@
 
     /* card */
     .card{
-      width:min(96vw, 420px);
-      background:#fff; border-radius:20px; box-shadow:0 15px 40px rgba(0,0,0,.10);
+      width:90vw;
+      max-width:360px;
+      background:#fff; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,.12);
       padding:20px 16px; text-align:center; z-index:1;
     }
-    h1{ margin:0 0 6px; font-size:clamp(22px, 6vw, 30px); line-height:1.25; }
+    h1{ margin:0 0 6px; font-size:clamp(22px, 6vw, 28px); line-height:1.25; }
     .note{ opacity:.7; margin-top:4px; font-size:14px }
 
     /* buttons area */
     .btns{ position:relative; margin-top:18px; min-height:160px; }
-    .row{ display:flex; gap:10px; justify-content:center; }
+    .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
     button{
       border:none; cursor:pointer; touch-action:manipulation; user-select:none;
       padding:12px 56px; border-radius:999px; font-weight:700; font-size:18px;
       transition:transform .18s ease, box-shadow .25s ease, background .25s ease;
     }
-    .love{ background:var(--accent); color:#fff; box-shadow:0 8px 18px rgba(39,196,153,.35); }
+    .love{ background:var(--accent); color:#fff; box-shadow:0 8px 18px rgba(255,111,165,.35); }
     .love:active{ transform:translateY(1px) }
 
-    .nolove{ position:absolute; background:#fff; color:var(--accent-2); border:2px solid var(--accent-2); box-shadow:0 8px 18px rgba(255,107,107,.20); transform-origin:center center; }
+    .nolove{ position:absolute; background:#fff; color:var(--accent-2); border:2px solid var(--accent-2); box-shadow:0 8px 18px rgba(255,59,106,.20); transform-origin:center center; z-index:2; }
 
     .shake{ animation:shake .35s ease }
     @keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
-    /* celebrate */
     .celebrate{ font-size:clamp(20px, 5vw, 28px); line-height:1.35; display:flex; flex-direction:column; align-items:center; gap:10px; }
     .big{ font-size:clamp(28px, 8vw, 42px); }
     .pulse{ animation:pulse 1.2s ease-in-out infinite; }
@@ -68,7 +67,7 @@
     <div class="hearts" id="hearts"></div>
 
     <div class="card" id="card">
-      <h1 id="title">รักเค้ามั้ย 💚</h1>
+      <h1 id="title">รักเค้ามั้ย 💖</h1>
       <div class="note" id="subtitle">ตอบหน่อยน้าา</div>
 
       <div class="btns" id="btns">
@@ -82,7 +81,6 @@
   <footer>ทำด้วยความรัก ♡</footer>
 
   <script>
-    // Fix mobile 100vh
     function setVh(){ document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px'); }
     setVh(); window.addEventListener('resize', setVh);
 
@@ -95,7 +93,7 @@
     const heartsLayer = document.getElementById('hearts');
 
     let tries = 0;
-    const maxTries = 7; // mobile version uses 7 rounds
+    const maxTries = 7;
 
     const rounds = [
       { title: 'ให้ตอบอีกรอบ 😢', sub: 'เถอะนะะะ' },
@@ -107,8 +105,7 @@
       { title: 'สุดท้ายจริงๆ ละ 😘', sub: 'เหลือคำตอบเดียวแล้วน้าาา' }
     ];
 
-    // Hearts background (lighter for phones)
-    function seedHearts(){ for(let i=0;i<14;i++) addHeart(Math.random()*100, Math.random()*8 + 6); }
+    function seedHearts(){ for(let i=0;i<12;i++) addHeart(Math.random()*100, Math.random()*8 + 6); }
     function addHeart(left=50, dur=8){
       const h = document.createElement('div');
       h.className = 'heart';
@@ -118,13 +115,13 @@
       heartsLayer.appendChild(h);
       h.addEventListener('animationend', () => h.remove());
     }
-    seedHearts(); setInterval(()=> addHeart(Math.random()*100, Math.random()*6 + 6), 1500);
+    seedHearts(); setInterval(()=> addHeart(Math.random()*100, Math.random()*6 + 6), 1600);
 
     function celebrate(){
       for(let i=0;i<20;i++) setTimeout(()=> addHeart(Math.random()*100, Math.random()*5 + 4), i*80);
       card.innerHTML = `
         <div class="celebrate">
-          <div class="big">เค้าก็รักเธอค้าบ 💚</div>
+          <div class="big">เค้าก็รักเธอค้าบ 💖</div>
           <div>ขอบคุณที่ตอบนะะะ ✨</div>
           <button class="love pulse" style="margin-top:10px; padding:14px 72px" onclick="location.reload()">เล่นอีกครั้ง</button>
         </div>
@@ -132,25 +129,21 @@
     }
     loveBtn.addEventListener('click', celebrate);
 
-    // Only shrink the NO button (track transform for mobile sizing)
     let noScale = 1;
     function resizeNo(){ noScale = Math.max(0.5, 1 - tries * 0.1); noBtn.style.transform = `scale(${noScale})`; }
 
     function noSize(){ return { w: noBtn.offsetWidth * noScale, h: noBtn.offsetHeight * noScale }; }
 
-    // Reposition NO within container without overlap & without touching edges
     function repositionNo(){
       if(!document.body.contains(noBtn)) return;
       const container = btns.getBoundingClientRect();
       const loveRect = loveBtn.getBoundingClientRect();
       const {w:nbw, h:nbh} = noSize();
 
-      // ensure absolute
       noBtn.style.position = 'absolute';
 
       const safe = 12;
-      // ensure container tall enough so the button doesn't clip
-      if (container.height < nbh * 2){ btns.style.minHeight = Math.max(160, nbh * 2 + 28) + 'px'; }
+      if (container.height < nbh * 2){ btns.style.minHeight = Math.max(200, nbh * 2 + 32) + 'px'; }
       const c = btns.getBoundingClientRect();
 
       const maxLeft = Math.max(safe, c.width - nbw - safe);
@@ -184,7 +177,7 @@
         const big = document.createElement('button');
         big.className = 'love pulse'; big.style.fontSize = '18px';
         big.style.padding = '14px 88px'; big.style.borderRadius = '999px';
-        big.textContent = 'รัก 💚'; big.addEventListener('click', celebrate);
+        big.textContent = 'รัก 💖'; big.addEventListener('click', celebrate);
         btns.appendChild(big);
 
         title.textContent = rounds[rounds.length-1].title;
@@ -192,7 +185,6 @@
       }
     });
 
-    // first layout
     window.addEventListener('load', ()=> { resizeNo(); repositionNo(); });
     window.addEventListener('resize', ()=> { resizeNo(); repositionNo(); });
   </script>
