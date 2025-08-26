@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>รักเค้ามั้ย 💚</title>
   <style>
     :root{
@@ -17,32 +17,41 @@
       font-family:"Noto Sans Thai",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       color:var(--txt);
       background:linear-gradient(180deg,var(--bg1),var(--bg2));
+      -webkit-tap-highlight-color: transparent;
     }
-    .wrap{min-height:100%;display:grid;place-items:center;overflow:hidden;position:relative;padding:24px;}
+    .wrap{min-height:100%;display:grid;place-items:center;overflow:hidden;position:relative;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
     .hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
     .heart{position:absolute;bottom:-40px;font-size:16px;opacity:.4;animation:floatUp 8s linear infinite;filter:drop-shadow(0 2px 2px rgba(0,0,0,.06));}
     @keyframes floatUp{0%{transform:translateY(0) scale(.8);opacity:0}10%{opacity:.4}100%{transform:translateY(-120vh) scale(1.1);opacity:0}}
 
-    .card{width:min(680px,92vw);background:#fff;border-radius:24px;padding:32px 28px;box-shadow:0 15px 40px rgba(0,0,0,.10);text-align:center;position:relative;}
-    h1{margin:0 0 10px;font-size:clamp(28px,5vw,40px);line-height:1.2;}
+    .card{width:min(680px,92vw);background:#fff;border-radius:24px;padding:28px 20px;box-shadow:0 15px 40px rgba(0,0,0,.10);text-align:center;position:relative;}
+    h1{margin:0 0 8px;font-size:clamp(24px,5vw,40px);line-height:1.25;}
     .note{opacity:.7;margin-top:6px;font-size:14px}
 
-    .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px;position:relative;min-height:100px;}
-    button{border:none;cursor:pointer;min-width:160px;padding:14px 50px;border-radius:999px;font-weight:700;font-size:18px;transition:all .25s ease;position:relative;}
+    .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px;position:relative;min-height:120px;}
+    button{border:none;cursor:pointer;min-width:150px;padding:14px 46px;border-radius:999px;font-weight:700;font-size:18px;transition:box-shadow .25s ease, transform .2s ease;position:relative;touch-action:manipulation;}
     .love{background:var(--accent);color:#fff;box-shadow:0 8px 18px rgba(39,196,153,.35);}
     .love:hover{transform:translateY(-2px)}
     .love:active{transform:translateY(0)}
-    .nolove{background:#fff;color:var(--accent-2);border:2px solid var(--accent-2);box-shadow:0 8px 18px rgba(255,107,107,.20);position:absolute;}
+    .nolove{background:#fff;color:var(--accent-2);border:2px solid var(--accent-2);box-shadow:0 8px 18px rgba(255,107,107,.20);position:absolute;z-index:1;transform-origin:center center;}
 
     .shake{animation:shake .35s ease}
     @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-    .celebrate{font-size:clamp(26px,5vw,38px);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:10px;}
-    .big{font-size:clamp(34px,8vw,60px);}
+    .celebrate{font-size:clamp(22px,5vw,38px);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:10px;}
+    .big{font-size:clamp(30px,8vw,60px);}    
     .pulse{animation:pulse 1.2s ease-in-out infinite;}
     @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 
     footer{position:fixed;bottom:10px;width:100%;text-align:center;font-size:12px;opacity:.55}
+
+    /* --- Mobile tweaks --- */
+    @media (max-width: 420px){
+      .card{padding:20px 14px;}
+      .btns{gap:10px; min-height:140px;}
+      button{min-width:140px; font-size:16px; padding:12px 40px;}
+      .love{padding:12px 56px;} /* กว้างขึ้นโดยไม่เพิ่มความสูง */
+    }
   </style>
 </head>
 <body>
@@ -70,7 +79,7 @@
     const heartsLayer = document.getElementById('hearts');
 
     let tries = 0;
-    const maxTries = 7; // จาก 5 → 7 รอบ
+    const maxTries = 7; // รองรับมือถือด้วย 7 รอบตามที่ตั้งไว้
 
     const rounds = [
       { title: 'ให้ตอบอีกรอบ 😢', sub: 'เถอะนะะะ' },
@@ -82,9 +91,9 @@
       { title: 'สุดท้ายจริงๆ ละ 😘', sub: 'เหลือคำตอบเดียวแล้วน้าาา' }
     ];
 
-    // ----- Hearts background -----
+    // ---- Hearts background ----
     function seedHearts(){
-      const count = 18;
+      const count = 16;
       for(let i=0;i<count;i++) addHeart(Math.random()*100, Math.random()*8 + 6);
     }
     function addHeart(left=50, dur=8){
@@ -98,44 +107,49 @@
     }
 
     seedHearts();
-    setInterval(()=> addHeart(Math.random()*100, Math.random()*6 + 6), 1200);
+    setInterval(()=> addHeart(Math.random()*100, Math.random()*6 + 6), 1400);
 
     function celebrate(){
-      for(let i=0;i<30;i++) setTimeout(()=> addHeart(Math.random()*100, Math.random()*5 + 4), i*80);
+      for(let i=0;i<24;i++) setTimeout(()=> addHeart(Math.random()*100, Math.random()*5 + 4), i*80);
       card.innerHTML = `
         <div class="celebrate">
           <div class="big">เค้าก็รักเธอค้าบ 💚</div>
           <div>ขอบคุณที่ตอบนะะะ ✨</div>
-          <button class="love pulse" style="margin-top:10px;padding:20px 120px" onclick="location.reload()">เล่นอีกครั้ง</button>
+          <button class="love pulse" style="margin-top:10px;padding:16px 96px" onclick="location.reload()">เล่นอีกครั้ง</button>
         </div>
       `;
     }
 
     loveBtn.addEventListener('click', celebrate);
 
-    // ----- Button sizing (keep LOVE horizontal from start) -----
+    // ---- Mobile-safe shrink tracking for NO button ----
+    let noScale = 1; // บันทึกสเกลจริงเพื่อคำนวณขนาดบนมือถือ
     function resizeButtons(){
-      const shrink = Math.max(0.45, 1 - tries * 0.12); // shrink only NO-LOVE
-      noBtn.style.transform = `scale(${shrink})`;
+      noScale = Math.max(0.5, 1 - tries * 0.1); // ค่อย ๆ เล็กลง แต่ไม่เล็กเกินไปบนมือถือ
+      noBtn.style.transform = `scale(${noScale})`;
     }
 
-    // ----- Randomize NO-LOVE position without leaving container or overlapping LOVE -----
+    // อ่านขนาดปุ่มหลังสเกล (คูณเองเพราะ offsetWidth ไม่รวม transform)
+    function getNoBtnSize(){
+      const w = noBtn.offsetWidth * noScale;
+      const h = noBtn.offsetHeight * noScale;
+      return {w,h};
+    }
+
     function repositionNoBtn(){
       if(!document.body.contains(noBtn)) return;
       const container = btns.getBoundingClientRect();
       const loveRect = loveBtn.getBoundingClientRect();
 
       noBtn.style.position = 'absolute';
+      const {w:nbw, h:nbh} = getNoBtnSize();
 
-      const nbw = noBtn.offsetWidth;
-      const nbh = noBtn.offsetHeight;
-
-      const safe = 16;
+      const safe = 12;
       let maxLeft = Math.max(safe, container.width - nbw - safe);
       let maxTop  = Math.max(safe, container.height - nbh - safe);
 
       if (container.height < nbh * 2){
-        btns.style.minHeight = Math.max(140, nbh * 2 + 24) + 'px';
+        btns.style.minHeight = Math.max(150, nbh * 2 + 24) + 'px';
       }
       const c = btns.getBoundingClientRect();
       maxLeft = Math.max(safe, c.width - nbw - safe);
@@ -146,7 +160,7 @@
         left = safe + Math.random() * (maxLeft - safe);
         top  = safe + Math.random() * (maxTop - safe);
         const r = { left: c.left + left, top: c.top + top, right: c.left + left + nbw, bottom: c.top + top + nbh };
-        const pad = 12;
+        const pad = 10;
         const noOverlap = (r.right < loveRect.left - pad) || (r.left > loveRect.right + pad) || (r.bottom < loveRect.top - pad) || (r.top > loveRect.bottom + pad);
         if(noOverlap) break;
         triesLocal++;
@@ -174,8 +188,8 @@
         btns.innerHTML = '';
         const big = document.createElement('button');
         big.className = 'love pulse';
-        big.style.fontSize = '20px';
-        big.style.padding = '18px 120px';
+        big.style.fontSize = '18px';
+        big.style.padding = '16px 96px';
         big.style.borderRadius = '999px';
         big.textContent = 'รัก 💚';
         big.addEventListener('click', celebrate);
@@ -186,8 +200,9 @@
       }
     });
 
+    // เรียกครั้งแรกและเวลาเปลี่ยนขนาดหน้าจอ
     window.addEventListener('load', ()=> { resizeButtons(); repositionNoBtn(); });
-    window.addEventListener('resize', ()=> repositionNoBtn());
+    window.addEventListener('resize', ()=> { resizeButtons(); repositionNoBtn(); });
   </script>
 </body>
 </html>
